@@ -11,9 +11,8 @@ You can easily install any Java version with `sdkman` as well.
 # Make sure you have sdkman installed.
 curl -s "https://get.sdkman.io" | bash
 
-# (Optional) Install the Java version of your choice
-sdk list java
-sdk install java 16.0.0.j9-adpt
+# Make sure you have Java installed.
+sdk install java
 
 # Make sure you have sbt installed.
 sdk install sbt
@@ -66,3 +65,17 @@ To build and run the pipeline, simply run the following command:
 ```sh
 sbt run
 ```
+
+You can also pass command line arguments to your pipeline.
+Note that you need quotes for the run command, otherwise they are interpreted as another `sbt` command.
+
+```sh
+sbt "run
+    --project=my-project-id
+    --inputText=MyCustomText
+"
+```
+
+To speed up subsequent builds, you can also run `sbt` in an
+[interactive shell](https://www.scala-sbt.org/1.x/docs/sbt-by-example.html),
+that way it only loads once.
