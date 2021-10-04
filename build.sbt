@@ -1,13 +1,21 @@
-name := "my-artifact-id"
-organization := "org.my.group.id"
-version := "1.0-SNAPSHOT"
-description := "An Apache Beam pipeline."
+mainClass := Some("com.example.App")
 
-val beamVersion = "2.28.0"
-
+val beamVersion = "2.32.0"
 libraryDependencies ++= Seq(
+  // App dependencies.
   "org.apache.beam" % "beam-sdks-java-core" % beamVersion,
   "org.apache.beam" % "beam-runners-direct-java" % beamVersion,
-  "org.apache.beam" % "beam-runners-google-cloud-dataflow-java" % beamVersion,
-  "org.slf4j" % "slf4j-jdk14" % "1.7.30"
+  "org.slf4j" % "slf4j-jdk14" % "1.7.32",
+
+  // Test dependencies.
+  "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
+  "org.junit.jupiter" % "junit-jupiter" % "5.8.1" % Test
 )
+
+// Package self-contained jar file.
+assembly / assemblyOutputPath := file("build/pipeline.jar")
+assembly / assemblyMergeStrategy := {
+  case PathList("META-INF")      => MergeStrategy.discard
+  case x if x.endsWith(".class") => MergeStrategy.first
+  case x                         => (assembly / assemblyMergeStrategy).value(x)
+}
