@@ -2,77 +2,134 @@
 
 ## Before you begin
 
-We are using [`sbt`](https://www.scala-sbt.org) to build and run this application.
-It's easiest to install with [`sdkman`](https://sdkman.io).
+Make sure you have a [Java](https://en.wikipedia.org/wiki/Java_%28programming_language%29) development environment ready.
+If you don't, an easy way to install it is with [`sdkman`](https://sdkman.io).
 
-You can easily install any Java version with `sdkman` as well.
+> ℹ️ Apache Beam currently only supports Java 8 (LTS) and Java 11 (LTS).
+>
+> ⚠️ **[Java 8 ends its active support in March 2022](https://endoflife.date/java)**, so we recommend using Java 11 (LTS) until Java 17 (LTS) is supported.
 
 ```sh
-# Make sure you have sdkman installed.
+# Install sdkman.
 curl -s "https://get.sdkman.io" | bash
 
-# Make sure you have Java installed.
-sdk install java
+# Make sure you have Java 11 installed.
+sdk install java 11.0.12-tem
+```
 
-# Make sure you have sbt installed.
+## Source file structure
+
+This is a very basic Apache Beam project to help you get started.
+
+There are only two source files:
+
+* [`src/main/java/com/example/App.java`](src/main/java/com/example/App.java): the application source file, containing the [`main` method](src/main/java/com/example/App.java). The _main class_ is `com.example.App`.
+* [`src/test/java/com/example/AppTest.java`](src/test/java/com/example/AppTest.java): tests for the `App.java` file.
+
+> ℹ️ Most build tools expect all the Java source files to be under `src/main/java/` and tests to be under `src/test/java/` by default.
+
+## Option A: Gradle
+
+[Gradle](https://gradle.org) is a build tool focused on flexibility and performance.
+
+This is a build tool widely used by many projects.
+
+```sh
+sdk install gradle
+```
+
+A basic Gradle setup consists of a [`build.gradle`](build.gradle) file written in [Groovy](https://groovy-lang.org) or [Kotlin](https://kotlinlang.org).
+
+```sh
+# To do a simple run.
+gradle run
+
+# To run passing command line arguments.
+gradle run -Pargs=--inputText="🎉"
+
+# To run the tests.
+gradle test --info
+```
+
+To build a self-contained jar file, we need to configure the [`jar`](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Jar.html) task in the [`build.gradle`](build.gradle) file.
+
+```sh
+# Build a self-contained jar.
+gradle jar
+
+# Run the jar application.
+java -jar build/pipeline.jar --inputText="🎉"
+```
+
+## Option B: sbt
+
+[`sbt` (Scala Build Tool)](https://www.scala-sbt.org/index.html) is a type-safe build tool for Scala and Java projects.
+Since it's type-safe, most errors are caught before the build starts.
+
+This is probably the simplest option, but isn't as widely used as Gradle.
+
+```sh
 sdk install sbt
 ```
 
-Optionally, configure your IDE to support `sbt`.
-
-For example, [Cloud Shell](https://cloud.google.com/shell) uses [Theia](https://theia-ide.org)
-for its IDE, which is compatible with most VS Code extensions.
-You can look at the available VSIX extensions at [open-vsx.org](https://open-vsx.org).
-
-> ⚠️ The terms and conditions in the Visual Studio Marketplace do not allow to
-> install their extensions in other IDEs.
-> Please use [open-vsx.org](https://open-vsx.org) instead.
-
-For `sbt` and Scala support, we need the
-[Scala Lang](https://open-vsx.org/extension/scala-lang/scala) and the
-[Scala (Metals)](https://open-vsx.org/extension/scalameta/metals) extensions.
+A basic `sbt` setup consists of a [`build.sbt`](build.sbt) file written in a Scala-based DSL, and optionally a [`project/plugins.sbt`](project/plugins.sbt) file.
 
 ```sh
-# Make sure the theia extensions directory exists.
-mkdir -p ~/.theia/extensions
-
-# Check out the extension pages to install the latest versions.
-SCALA_LANG_VERSION=0.5.0
-SCALA_METALS_VERSION=1.10.2
-
-wget -O /tmp/scala-lang.vsix https://open-vsx.org/api/scala-lang/scala/$SCALA_LANG_VERSION/file/scala-lang.scala-$SCALA_LANG_VERSION.vsix
-wget -O /tmp/scala-metals.vsix https://open-vsx.org/api/scalameta/metals/$SCALA_METALS_VERSION/file/scalameta.metals-$SCALA_METALS_VERSION.vsix
-unzip /tmp/scala-lang.vsix -d ~/.theia/extensions/scala-lang
-unzip /tmp/scala-metals.vsix -d ~/.theia/extensions/scala-metals
-```
-
-Then restart Cloud Shell to load the extension.
-
-In the IDE settings, you might need to set the "Java Home" in the Metals extension.
-
-```sh
-# Set this in the "Metals" -> "Java Home" settings of your IDE.
-echo $JAVA_HOME
-```
-
-## Running the pipeline
-
-You can run the project by simply running:
-
-```sh
+# To do a simple run.
 sbt run
+
+# To run passing command line arguments.
+sbt 'run --inputText="🎉"'
+
+# To run the tests.
+sbt test
 ```
 
-You can also pass command line arguments to your pipeline.
-Note that you need quotes for the run command, otherwise they are interpreted as another `sbt` command.
+To build a self-contained jar file, we need to import [`sbt-assembly`](https://github.com/sbt/sbt-assembly) in the [`project/plugins.sbt`](project/plugins.sbt) file and configure it in the [`build.sbt`](build.sbt) file.
 
 ```sh
-sbt "run
-    --project=my-project-id
-    --inputText=MyCustomText
-"
+# Build a self-contained jar.
+sbt assembly
+
+# Run the jar application.
+java -jar build/pipeline.jar --inputText="🎉"
 ```
 
-To speed up subsequent builds, you can also run `sbt` in an
-[interactive shell](https://www.scala-sbt.org/1.x/docs/sbt-by-example.html),
-that way it only loads once.
+## Option C: Apache Maven _(not recommended)_
+
+[Apache Maven](http://maven.apache.org) is a project management and comprehension tool based on the concept of a project object model (POM).
+
+This is by far the trickiest to configure, but many older projects still use it.
+
+If you are starting a new project, we recommend using Gradle or `sbt` instead.
+
+> ℹ️ If you have an existing Maven project, consider looking at a [Gradle vs Maven comparison](https://gradle.org/maven-vs-gradle), as well as Gradle's [Migrating builds from Apache Maven](https://docs.gradle.org/current/userguide/migrating_from_maven.html) guide.
+
+```sh
+sdk install maven
+```
+
+A basic Apache Maven setup consists of a [`pom.xml`](pom.xml) file written in [XML](https://www.w3schools.com/xml).
+
+To run the app through Maven, we need to configure [`exec-maven-plugin`](http://www.mojohaus.org/exec-maven-plugin) in the [`pom.xml`](pom.xml) file.
+
+```sh
+# To do a simple run.
+mvn compile exec:java
+
+# To run passing command line arguments.
+mvn compile exec:java -Dexec.args=--inputText="🎉"
+
+# To run the tests.
+mvn test
+```
+
+To build a self-contained jar file, we need to configure [`maven-assembly-plugin`](https://people.apache.org/~epunzalan/maven-assembly-plugin/index.html) in the [`pom.xml`](pom.xml) file.
+
+```sh
+# Build a self-contained jar.
+mvn package
+
+# Run the jar application.
+java -jar target/beam-java-starter-1-jar-with-dependencies.jar --inputText="🎉"
+```
