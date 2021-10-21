@@ -14,7 +14,6 @@ jobs:
         cache: 'gradle'
     - run: gradle assemble --info
     - run: gradle test --info
-    - run: gradle jar --info
     - run: java -jar build/pipeline.jar --inputText="🎉"
 
   sbt:
@@ -25,9 +24,8 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '11'
-    - run: sbt -v 'Test / compile'
+    - run: sbt -v 'Test / compile' assembly
     - run: sbt -v test
-    - run: sbt -v assembly
     - run: java -jar build/pipeline.jar --inputText="🎉"
 
   Maven:
@@ -39,7 +37,6 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
         cache: 'maven'
-    - run: mvn test-compile
+    - run: mvn -DskipTests test-compile package
     - run: mvn test
-    - run: mvn package
     - run: java -jar target/beam-java-starter-1-jar-with-dependencies.jar --inputText="🎉"
