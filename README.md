@@ -28,7 +28,7 @@ There are only two source files:
 
 > ℹ️ Most build tools expect all the Java source files to be under `src/main/java/` and tests to be under `src/test/java/` by default.
 
-## Option A: Gradle
+### Option A: Gradle
 
 [Gradle](https://gradle.org) is a build tool focused on flexibility and performance.
 
@@ -61,7 +61,7 @@ gradle jar
 java -jar build/pipeline.jar --inputText="🎉"
 ```
 
-## Option B: sbt
+### Option B: sbt
 
 [`sbt` (Scala Build Tool)](https://www.scala-sbt.org/index.html) is a type-safe build tool for Scala and Java projects.
 Since it's type-safe, most errors are caught before the build starts.
@@ -95,7 +95,7 @@ sbt assembly
 java -jar build/pipeline.jar --inputText="🎉"
 ```
 
-## Option C: Apache Maven _(not recommended)_
+### Option C: Apache Maven _(not recommended)_
 
 [Apache Maven](http://maven.apache.org) is a project management and comprehension tool based on the concept of a project object model (POM).
 
@@ -133,3 +133,11 @@ mvn package
 # Run the jar application.
 java -jar target/beam-java-starter-1-jar-with-dependencies.jar --inputText="🎉"
 ```
+
+## Using other runners
+
+To keep this template small, it only includes the [Direct Runner](https://beam.apache.org/documentation/runners/direct/).
+
+For a comparison of what each runner currently supports, look at the [Beam Capability Matrix](https://beam.apache.org/documentation/runners/capability-matrix/).
+
+To add a new runner, visit the runner's page for instructions on how to include it.
