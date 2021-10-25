@@ -15,7 +15,7 @@ test {
     useJUnitPlatform()
 }
 
-def beamVersion = "2.32.0"
+def beamVersion = '2.32.0'
 dependencies {
     // App dependencies.
     implementation "org.apache.beam:beam-sdks-java-core:${beamVersion}"
@@ -31,11 +31,11 @@ jar {
     baseName = 'pipeline'
     destinationDirectory = file('build')
     manifest {
-        attributes "Main-Class": "com.example.App"
+        attributes 'Main-Class': 'com.example.App'
     }
-    exclude "META-INF/*.SF"
-    exclude "META-INF/*.DSA"
-    exclude "META-INF/*.RSA"
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
