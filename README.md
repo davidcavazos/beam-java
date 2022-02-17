@@ -141,3 +141,9 @@ To keep this template small, it only includes the [Direct Runner](https://beam.a
 For a comparison of what each runner currently supports, look at the [Beam Capability Matrix](https://beam.apache.org/documentation/runners/capability-matrix/).
 
 To add a new runner, visit the runner's page for instructions on how to include it.
+
+## GitHub Actions automated testing
+
+This project already comes with automated testing via [GitHub Actions](https://github.com/features/actions).
+
+To configure it, look at the [`.github/workflows/test.yaml`](.github/workflows/test.yaml) file.
